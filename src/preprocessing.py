@@ -1,6 +1,8 @@
 import pandas as pd
 import numpy as np
 
+from src.feature_groups import build_feature_groups
+
 def load_and_preprocess_data(file_path):
     """
     Ham veriyi okur, sızıntı kaynaklarını temizler ve 
@@ -40,12 +42,8 @@ def load_and_preprocess_data(file_path):
         and df_clean[c].nunique() > 1
     ]
     
-    # 6. Özellik Gruplarını Tanımla (Ablasyon Deneyleri İçin)
-    feature_groups = {
-        "Fizikokimya": [c for c in valid_numeric if any(k in c.lower() for k in ['zape', 'delta', 'ph', 'condutividade', 'turbidez']) or c in ['ZAPE VOLUME', 'ZAPE POPULACAO']],
-        "Meteoroloji": [c for c in valid_numeric if any(k in c.lower() for k in ['temp', 'precip', 'umidade', 'proxy'])],
-        "Takvim": [c for c in valid_numeric if any(k in c.lower() for k in ['mes', 'sin', 'flag', 'desinfetante'])],
-    }
+    # 6. Özellik grupları (açık liste; src/feature_groups.py)
+    feature_groups = build_feature_groups(valid_numeric)
     
     X = df_clean[valid_numeric]
     y = df_clean['TARGET_BINARY']
