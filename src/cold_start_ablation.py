@@ -1,4 +1,3 @@
-
 """Cold-start icin ozellik grubu senaryolari."""
 
 FEATURE_GROUPS = {
@@ -90,6 +89,18 @@ def build_ablation_sets(X):
         "TEMP_EWMA_REGIONAL",
     ]
 
+    regional_features = [
+        "ZAPE VOLUME",
+        "ZAPE POPULACAO",
+        "Proxy_Tempo_Retencao",
+    ]
+
+    previous_zape_features = [
+        "CLORO_RESIDUAL_PREV",
+        "DELTA_DIAS_ZAPE",
+        "LOG_DELTA_DIAS",
+    ]
+
     scenarios = {
         "A_Ihtiyatli": conservative,
 
@@ -99,7 +110,7 @@ def build_ablation_sets(X):
         ],
 
         "C_Bolgesel": (
-            conservative + FEATURE_GROUPS["Bolgesel"]
+            conservative + regional_features
         ),
 
         "D_Gecmis_Meteoroloji": (
@@ -111,11 +122,28 @@ def build_ablation_sets(X):
         ),
 
         "F_Genisletilmis": list(X.columns),
+
+        # YENI SENARYO G
+        # Bolgesel ozellikleri cikar.
+        "G_Bolgesiz": [
+            col for col in X.columns
+            if col not in regional_features
+        ],
+
+        # YENI SENARYO H
+        # Bolgesel ve gecmis ZAPE ozelliklerini cikar.
+        "H_Bolgesiz_Gecmissiz": [
+            col for col in X.columns
+            if col not in (
+                regional_features + previous_zape_features
+            )
+        ],
     }
 
     result = {}
 
     for name, columns in scenarios.items():
+
         if len(columns) != len(set(columns)):
             raise ValueError(
                 f"{name} senaryosunda tekrar eden sutun var!"

@@ -30,6 +30,12 @@ def load_and_preprocess_data(file_path):
         if any(k in c.lower() for k in ['coli', 'bact', 'target', 'falha'])
     ]
     all_forbidden = set(drop_leakage + auto_leakage)
+        # Cold-start: gecmis mikrobiyolojik bilgileri modele dahil etme
+    cold_start_forbidden = [
+        "DECAIMENTO_MICROBIO_PREV",
+    ]
+
+    all_forbidden.update(cold_start_forbidden)
     
     # 5. Sayısal sütunları seç ve %50'den fazla eksik olanları / sabit sütunları ele
     numeric_cols = df_clean.select_dtypes(include=[np.number]).columns.tolist()
