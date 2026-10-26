@@ -1,0 +1,10 @@
+﻿Feature_Set,Model,ROC_AUC,PR_AUC,MCC
+A_Conservative,Random Forest,0.7642,0.4303,0.2646
+A_Conservative,LightGBM,0.7714,0.3813,0.2781
+A_Conservative,Logistic Regression,0.7558,0.3623,0.2946
+B_Meteorological,Random Forest,0.6348,0.3902,0.2254
+B_Meteorological,LightGBM,0.6113,0.2774,0.1221
+B_Meteorological,Logistic Regression,0.6205,0.253,0.1208
+C_Extended,Random Forest,0.7718,0.4389,0.2775
+C_Extended,LightGBM,0.7828,0.4112,0.2926
+C_Extended,Logistic Regression,0.7275,0.3397,0.2734
