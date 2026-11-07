@@ -52,6 +52,14 @@ def best_mcc_threshold(y, prob):
     return float(candidates[int(np.argmax(scores))])
 
 
+def fit_model(model, df, features, idx):
+    """Modeli egitir. Alan genelleme modellerine belediye bilgisi verilir."""
+    X, y = df.iloc[idx][features], df["y"].values[idx]
+    if getattr(model, "needs_groups", False):
+        return model.fit(X, y, groups=df["municipality"].values[idx])
+    return model.fit(X, y)
+
+
 # ------------------------------------------------------------- esik secimi
 def choose_threshold(df, features, model_name, train_idx, seed,
                      inner_splits=4, purge=True):
@@ -67,8 +75,7 @@ def choose_threshold(df, features, model_name, train_idx, seed,
     inner_prob = np.full(len(df), np.nan)
     for tr, te in grouped_splits(df, inner_splits, seed + 1000, purge,
                                  index=train_idx):
-        m = make_model(model_name, seed)
-        m.fit(df.iloc[tr][features], df["y"].values[tr])
+        m = fit_model(make_model(model_name, seed), df, features, tr)
         inner_prob[te] = m.predict_proba(df.iloc[te][features])[:, 1]
     mask = ~np.isnan(inner_prob)
     return best_mcc_threshold(df["y"].values[mask], inner_prob[mask])
@@ -89,8 +96,8 @@ def run_cv(df, features, model_name, seeds=(0, 1, 2, 3, 4), n_splits=5,
                 grouped_splits(df, n_splits, seed, purge)):
             if train_mask is not None:
                 tr = tr[np.asarray(train_mask)[tr]]
-            model = make_model(model_name, seed)
-            model.fit(df.iloc[tr][features], df["y"].values[tr])
+            model = fit_model(make_model(model_name, seed), df, features,
+                              tr)
             prob = model.predict_proba(df.iloc[te][features])[:, 1]
             thr = (choose_threshold(df, features, model_name, tr, seed,
                                     purge=purge)
@@ -113,8 +120,8 @@ def run_temporal(df, features, model_name, splits, seeds=(0, 1, 2)):
     rows = []
     for seed in seeds:
         for label, tr, te in splits:
-            model = make_model(model_name, seed)
-            model.fit(df.iloc[tr][features], df["y"].values[tr])
+            model = fit_model(make_model(model_name, seed), df, features,
+                              tr)
             prob = model.predict_proba(df.iloc[te][features])[:, 1]
             thr = choose_threshold(df, features, model_name, tr, seed)
             rows.append(pd.DataFrame({

@@ -48,6 +48,7 @@ Bütün komutlar proje kök klasöründen çalıştırılır.
 | `python -m experiments.e02_routine_and_chlorine` | Rutin numunelerde performans ve yalnız klor kıyası (e01 gerekli) | `results/e02_routine_and_chlorine/` |
 | `python -m experiments.e03_temporal` | Zamana göre doğrulama: geçmişle eğit, sonraki yılları test et | `results/e03_temporal/` |
 | `python -m experiments.e04_weather_lags` | Son 3/7/14 günün yağışı gibi gecikmeli hava özellikleri | `results/e04_weather_lags/` |
+| `python -m experiments.e05_model_comparison` | LR, LightGBM, MLP, GroupDRO, CORAL; ZAPE CV, zamansal ve belediye dışarıda bırakma protokolleri | `results/e05_model_comparison/` |
 
 ## Klasör yapısı
 
@@ -58,6 +59,7 @@ src/
   data.py             veriyi yükler, özellik setlerini (A, B, C) tanımlar
   validation.py       doğrulama protokolleri (ZAPE gruplu + arındırılmış CV, zamansal bölme)
   models.py           model tanımları (LR, RF, LightGBM)
+  deep.py             MLP (derin öğrenme) + alan genelleme (GroupDRO, CORAL), PyTorch
   weather.py          günlük hava verisinden gecikmeli özellikler (yalnızca numune gününden önceki günler)
   evaluation.py       deney döngüsü, eşik seçimi, metrikler, ZAPE bootstrap
   data_quality_report.py, preprocessing.py, feature_groups.py   veri analizi raporu

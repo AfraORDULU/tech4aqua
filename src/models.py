@@ -15,6 +15,7 @@ from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import StandardScaler
 
 MODEL_NAMES = ("LR", "RF", "LGBM")
+DEEP_MODEL_NAMES = ("MLP", "GROUPDRO", "CORAL")
 
 
 def make_model(name, seed=42):
@@ -42,4 +43,9 @@ def make_model(name, seed=42):
                 reg_lambda=1.0, class_weight="balanced",
                 random_state=seed, verbose=-1)),
         ])
+    if name in DEEP_MODEL_NAMES:
+        from src.deep import TorchTabularClassifier  # torch yalnizca gerekirse
+        method = {"MLP": "erm", "GROUPDRO": "groupdro",
+                  "CORAL": "coral"}[name]
+        return TorchTabularClassifier(method=method, seed=seed)
     raise ValueError(f"Bilinmeyen model: {name}")
