@@ -55,7 +55,15 @@ def best_mcc_threshold(y, prob):
 # ------------------------------------------------------------- esik secimi
 def choose_threshold(df, features, model_name, train_idx, seed,
                      inner_splits=4, purge=True):
-    """Egitim katinin icinde ic CV ile esik secer."""
+    """Egitim katinin icinde ic CV ile esik secer.
+
+    Egitimde cok az ZAPE varsa ic bolme sayisi azaltilir; ic CV
+    yapilamiyorsa 0.5 dondurulur.
+    """
+    n_groups = len(set(df["zape"].values[train_idx]))
+    inner_splits = min(inner_splits, n_groups)
+    if inner_splits < 2:
+        return 0.5
     inner_prob = np.full(len(df), np.nan)
     for tr, te in grouped_splits(df, inner_splits, seed + 1000, purge,
                                  index=train_idx):
@@ -91,6 +99,27 @@ def run_cv(df, features, model_name, seeds=(0, 1, 2, 3, 4), n_splits=5,
                 "seed": seed, "fold": fold, "row": te,
                 "prob": prob, "threshold": thr,
                 "pred": (prob >= thr).astype(int),
+            }))
+    return pd.concat(rows, ignore_index=True)
+
+
+def run_temporal(df, features, model_name, splits, seeds=(0, 1, 2)):
+    """Zamansal bolmeler icin test-disi olasiliklar.
+
+    splits: (etiket, train_idx, test_idx) listesi
+            (or. validation.temporal_splits ciktisi).
+    Esik yine yalnizca egitim verisi icinde secilir.
+    """
+    rows = []
+    for seed in seeds:
+        for label, tr, te in splits:
+            model = make_model(model_name, seed)
+            model.fit(df.iloc[tr][features], df["y"].values[tr])
+            prob = model.predict_proba(df.iloc[te][features])[:, 1]
+            thr = choose_threshold(df, features, model_name, tr, seed)
+            rows.append(pd.DataFrame({
+                "seed": seed, "fold": label, "row": te, "prob": prob,
+                "threshold": thr, "pred": (prob >= thr).astype(int),
             }))
     return pd.concat(rows, ignore_index=True)
 

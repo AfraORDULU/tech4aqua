@@ -1,0 +1,7 @@
+,negatif_medyan,pozitif_medyan,rutin_negatif_medyan,rutin_pozitif_medyan
+RAIN_3D,1.2,0.15,1.2,1.1
+RAIN_7D,9.8,2.15,9.4,4.2
+RAIN_14D,26.0,6.0,22.6,17.9
+WET_DAYS_7D,2.0,1.0,2.0,1.0
+DAYS_SINCE_RAIN,4.0,5.0,4.0,2.0
+TMEAN_7D,11.69,16.7,12.43,13.2

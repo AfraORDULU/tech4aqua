@@ -56,12 +56,13 @@ def grouped_splits(df, n_splits=5, seed=0, purge=True, index=None):
         yield tr, te
 
 
-def temporal_splits(df, test_years, unseen_zape=False, min_train_pos=5):
+def temporal_splits(df, test_years, unseen_zape=False, min_train_pos=5,
+                    min_train_zapes=5):
     """Her test yili icin (yil, train_idx, test_idx) uretir.
 
     Egitim: test yilindan ONCEKI tum yillar. Egitimde en az
-    min_train_pos pozitif yoksa veya testte hic pozitif yoksa
-    o yil atlanir (AUC hesaplanamaz).
+    min_train_pos pozitif / min_train_zapes ZAPE yoksa veya testte hic
+    pozitif yoksa o yil atlanir.
     """
     years = df["year"].values
     for year in test_years:
@@ -71,6 +72,8 @@ def temporal_splits(df, test_years, unseen_zape=False, min_train_pos=5):
             tr_mask &= ~df["zape"].isin(set(df["zape"].values[te])).values
         tr = np.where(tr_mask)[0]
         if df["y"].values[tr].sum() < min_train_pos:
+            continue
+        if len(set(df["zape"].values[tr])) < min_train_zapes:
             continue
         if df["y"].values[te].sum() == 0:
             continue

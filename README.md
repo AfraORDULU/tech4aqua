@@ -30,6 +30,13 @@ python -m src.build_dataset
 
 Bu komut `data/processed/tech4aqua_labeled.csv` dosyasını oluşturur.
 
+4. Günlük hava verisini indirin (gecikmeli yağış deneyi için). Aşağıdaki bağlantı,
+   Chaves, Montalegre ve Boticas için 2007-12-01 – 2025-12-31 arası günlük yağış ve
+   sıcaklık verisini CSV olarak indirir. Dosyayı `data/external/open_meteo_daily.csv`
+   adıyla kaydedin.
+
+   https://archive-api.open-meteo.com/v1/archive?latitude=41.74,41.82,41.69&longitude=-7.47,-7.79,-7.67&start_date=2007-12-01&end_date=2025-12-31&daily=precipitation_sum,temperature_2m_max,temperature_2m_mean&timezone=Europe/Lisbon&format=csv
+
 ## Deneyleri çalıştırma
 
 Bütün komutlar proje kök klasöründen çalıştırılır.
@@ -39,6 +46,8 @@ Bütün komutlar proje kök klasöründen çalıştırılır.
 | `python -m src.data_quality_report` | Veri analizi ve etiket denetimi | `results/data_audit/` |
 | `python -m experiments.e01_baseline` | 3 model × 3 özellik seti, arındırılmış ZAPE gruplu CV | `results/e01_baseline/` |
 | `python -m experiments.e02_routine_and_chlorine` | Rutin numunelerde performans ve yalnız klor kıyası (e01 gerekli) | `results/e02_routine_and_chlorine/` |
+| `python -m experiments.e03_temporal` | Zamana göre doğrulama: geçmişle eğit, sonraki yılları test et | `results/e03_temporal/` |
+| `python -m experiments.e04_weather_lags` | Son 3/7/14 günün yağışı gibi gecikmeli hava özellikleri | `results/e04_weather_lags/` |
 
 ## Klasör yapısı
 
@@ -49,6 +58,7 @@ src/
   data.py             veriyi yükler, özellik setlerini (A, B, C) tanımlar
   validation.py       doğrulama protokolleri (ZAPE gruplu + arındırılmış CV, zamansal bölme)
   models.py           model tanımları (LR, RF, LightGBM)
+  weather.py          günlük hava verisinden gecikmeli özellikler (yalnızca numune gününden önceki günler)
   evaluation.py       deney döngüsü, eşik seçimi, metrikler, ZAPE bootstrap
   data_quality_report.py, preprocessing.py, feature_groups.py   veri analizi raporu
 experiments/          her deney ayrı bir dosya (e01_, e02_, ...)
