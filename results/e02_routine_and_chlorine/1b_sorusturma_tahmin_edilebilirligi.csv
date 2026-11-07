@@ -1,0 +1,5 @@
+feature_set,hedef,ROC_AUC,ROC_AUC_std
+A,is_investigation,0.5959,0.0224
+B,is_investigation,0.6435,0.015
+C,is_investigation,0.5989,0.0129
+CHLORINE_ONLY,is_investigation,0.3885,0.0158

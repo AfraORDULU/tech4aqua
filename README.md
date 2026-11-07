@@ -38,6 +38,7 @@ Bütün komutlar proje kök klasöründen çalıştırılır.
 |---|---|---|
 | `python -m src.data_quality_report` | Veri analizi ve etiket denetimi | `results/data_audit/` |
 | `python -m experiments.e01_baseline` | 3 model × 3 özellik seti, arındırılmış ZAPE gruplu CV | `results/e01_baseline/` |
+| `python -m experiments.e02_routine_and_chlorine` | Rutin numunelerde performans ve yalnız klor kıyası (e01 gerekli) | `results/e02_routine_and_chlorine/` |
 
 ## Klasör yapısı
 
