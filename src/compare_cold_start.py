@@ -1,3 +1,4 @@
+from src.config import DATA_PATH as CONFIG_DATA_PATH
 
 import numpy as np
 import pandas as pd
@@ -21,7 +22,7 @@ from src.cold_start_features import (
     build_conservative_set,
 )
 
-DATA_PATH = "data/raw/Base_Tech4Aqua_Features_Avancadas.csv"
+DATA_PATH = str(CONFIG_DATA_PATH)
 
 # Mevcut veri hazirlama fonksiyonumuzu kullaniyoruz
 X, y, groups, feature_names = load_and_preprocess_data(DATA_PATH)

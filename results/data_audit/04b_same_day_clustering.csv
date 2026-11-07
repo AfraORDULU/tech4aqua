@@ -1,0 +1,15 @@
+Kontrol,Sonuc
+Ayni belediye+gunu baska etiketli numuneyle paylasan numune,110.0
+  bunlarin pozitif olani,29.0
+Birden fazla numune alinan belediye-gun sayisi,42.0
+  en az 2 pozitif iceren belediye-gun,9.0
+Etiketli numunelerde benzersiz tarih,449.0
+TEMP MÁX (ºC): ayni gun birebir ayni olan belediye-gun orani,0.429
+TEMP MÁX (ºC): ayni gun medyan fark,0.15
+TEMP MÁX (ºC): farkli gunler medyan fark,7.3
+PRECIPITAÇÃO (mm): ayni gun birebir ayni olan belediye-gun orani,0.69
+PRECIPITAÇÃO (mm): ayni gun medyan fark,0.0
+PRECIPITAÇÃO (mm): farkli gunler medyan fark,0.9
+UMIDADE MÉDIA (%): ayni gun birebir ayni olan belediye-gun orani,0.405
+UMIDADE MÉDIA (%): ayni gun medyan fark,0.55
+UMIDADE MÉDIA (%): farkli gunler medyan fark,15.8

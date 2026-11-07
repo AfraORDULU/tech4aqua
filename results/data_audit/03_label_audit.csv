@@ -1,0 +1,14 @@
+Kontrol,Sonuc
+Etiket kaynagi,Laboratuvar koliform sayimi (N/100 mL); elle etiketleme yok
+Etiket kurali,"Koliform > 0 ise 1 (DL 306/2007, 0/100 mL siniri)"
+Ham koliform kaydi,548
+Birim(ler),N/100 mL
+Operator '=' kaydi,536
+"Operator '>' kaydi (ust olcum siniri, pozitif)",10
+Operator '<' kaydi (tespit siniri alti),2
+Ayni ZAPE+gunde birden fazla kayit olan numune,21
+Birlestirme kurali,Ayni gun kayitlarinin ortalamasi > 0 ise pozitif
+Yazarlarin etiketi ham veriden yeniden uretildi mi,Evet (522/522)
+'<' nedeniyle yanlis pozitif olup duzeltilen,2
+"Supheli kesirli sonuc (0<x<1, '=')",5
+Kesirli sonuclu numunelerin ornekleme turu,Sorusturma

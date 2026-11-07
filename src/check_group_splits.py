@@ -1,3 +1,4 @@
+from src.config import DATA_PATH as CONFIG_DATA_PATH
 
 import pandas as pd
 from pathlib import Path
@@ -5,7 +6,7 @@ from sklearn.model_selection import StratifiedGroupKFold
 
 from src.preprocessing import load_and_preprocess_data
 
-DATA_PATH = "data/raw/Base_Tech4Aqua_Features_Avancadas.csv"
+DATA_PATH = str(CONFIG_DATA_PATH)
 
 X, y, groups, feature_names = load_and_preprocess_data(
     DATA_PATH

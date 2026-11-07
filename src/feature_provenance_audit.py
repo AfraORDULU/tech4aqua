@@ -1,3 +1,4 @@
+from src.config import DATA_PATH as CONFIG_DATA_PATH
 
 from pathlib import Path
 import pandas as pd
@@ -5,7 +6,7 @@ import pandas as pd
 from src.preprocessing import load_and_preprocess_data
 from src.cold_start_features import RESTRICTED_FEATURES
 
-DATA_PATH = "data/raw/Base_Tech4Aqua_Features_Avancadas.csv"
+DATA_PATH = str(CONFIG_DATA_PATH)
 
 X, y, groups, feature_names = load_and_preprocess_data(DATA_PATH)
 

@@ -1,7 +1,8 @@
+from src.config import DATA_PATH as CONFIG_DATA_PATH
 
 import pandas as pd
 
-DATA_PATH = "data/raw/Base_Tech4Aqua_Features_Avancadas.csv"
+DATA_PATH = str(CONFIG_DATA_PATH)
 
 df = pd.read_csv(DATA_PATH)
 

@@ -1,0 +1,29 @@
+Ozellik,Durum,Farkli_Satir_(522_icinde)
+Desinfetante residual,Ham veriden birebir uretildi,0.0
+FLAG_PH_ANORMAL,Uretim kodu pakette YOK,
+FLAG_CLORO_CRITICO,Uretim kodu pakette YOK,
+FLAG_TURVACAO_ALTA,Uretim kodu pakette YOK,
+CLORO_RESIDUAL_PREV,Ham veriden birebir uretildi,0.0
+DEGRADACAO_TERMICA_CLORO,"Ham veriden uretildi, farklar var",15.0
+ZAPE VOLUME,Ham veriden birebir uretildi,0.0
+ZAPE POPULACAO,Ham veriden birebir uretildi,0.0
+DELTA_DIAS_ZAPE,Ham veriden birebir uretildi,0.0
+LOG_DELTA_DIAS,Ham veriden birebir uretildi,0.0
+Proxy_Tempo_Retencao,Ham veriden birebir uretildi,0.0
+FLAG_CALOR_EXTREMO,Uretim kodu pakette YOK,
+FLAG_RUNOFF_RISCO,Uretim kodu pakette YOK,
+INDICE_ESTRESSE_CONJUNTO,Uretim kodu pakette YOK,
+INDICE_RUNOFF_TURVACAO,Uretim kodu pakette YOK,
+TEMP MÁX (ºC),Ham veriden birebir uretildi,0.0
+PRECIPITAÇÃO (mm),Ham veriden birebir uretildi,0.0
+UMIDADE MÉDIA (%),Ham veriden birebir uretildi,0.0
+PRECIP_LAG1_REGIONAL,Ham veriden birebir uretildi,0.0
+PRECIP_DIFF_REGIONAL,Ham veriden birebir uretildi,0.0
+TEMP_LAG1_REGIONAL,Ham veriden birebir uretildi,0.0
+TEMP_DIFF_REGIONAL,Ham veriden birebir uretildi,0.0
+PRECIP_EWMA_REGIONAL,Ham veriden birebir uretildi,0.0
+TEMP_EWMA_REGIONAL,Ham veriden birebir uretildi,0.0
+MES,Uretim kodu pakette YOK,
+SIN_MES,Uretim kodu pakette YOK,
+COS_MES,Uretim kodu pakette YOK,
+FLAG_VERAO,Uretim kodu pakette YOK,

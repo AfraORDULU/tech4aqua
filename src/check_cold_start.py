@@ -1,9 +1,10 @@
+from src.config import DATA_PATH as CONFIG_DATA_PATH
 
 from pathlib import Path
 import pandas as pd
 
 path = Path(
-    "data/raw/Base_Tech4Aqua_Features_Avancadas.csv"
+    str(CONFIG_DATA_PATH)
 )
 
 df = pd.read_csv(path)

@@ -1,3 +1,4 @@
+from src.config import DATA_PATH as CONFIG_DATA_PATH
 
 from pathlib import Path
 
@@ -23,7 +24,7 @@ from src.cold_start_ablation import build_ablation_sets
 
 
 # 1. Veri setini oku
-DATA_PATH = "data/raw/Base_Tech4Aqua_Features_Avancadas.csv"
+DATA_PATH = str(CONFIG_DATA_PATH)
 
 X, y, groups, _ = load_and_preprocess_data(DATA_PATH)
 

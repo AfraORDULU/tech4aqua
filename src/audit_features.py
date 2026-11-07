@@ -1,3 +1,4 @@
+from src.config import DATA_PATH as CONFIG_DATA_PATH
 
 from pathlib import Path
 import pandas as pd
@@ -6,7 +7,7 @@ import numpy as np
 from src.preprocessing import load_and_preprocess_data
 
 # Projenin ana klasöründeki veri dosyası
-DATA_PATH = Path("data/raw/Base_Tech4Aqua_Features_Avancadas.csv")
+DATA_PATH = Path(str(CONFIG_DATA_PATH))
 
 print("=" * 60)
 print("TECH4AQUA - COLD START OZELLIK DENETIMI")

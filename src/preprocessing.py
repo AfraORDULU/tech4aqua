@@ -3,6 +3,24 @@ import numpy as np
 
 from src.feature_groups import build_feature_groups
 
+META_PREFIX = "META_"
+
+
+def load_metadata(file_path):
+    """
+    load_and_preprocess_data ile ayni satirlar (ayni index) icin
+    analiz bilgilerini dondurur: belediye, tarih, ZAPE ve META_
+    sutunlari. Duyarlilik analizleri (or. sorusturma numuneleri
+    haric) ve yeni gruplama protokolleri icin kullanilir.
+    """
+    df = pd.read_csv(file_path)
+    df_clean = df[df['Bactérias coliformes'].notna()]
+
+    cols = ['FREGUESIA', 'ZAPE NOME', 'DATA AMOSTRAGEM'] + [
+        c for c in df_clean.columns if c.startswith(META_PREFIX)
+    ]
+    return df_clean[cols].copy()
+
 def load_and_preprocess_data(file_path):
     """
     Ham veriyi okur, sızıntı kaynaklarını temizler ve 
@@ -10,7 +28,14 @@ def load_and_preprocess_data(file_path):
     """
     # 1. Ham veriyi oku
     df = pd.read_csv(file_path)
-    
+
+    if not any(c.startswith(META_PREFIX) for c in df.columns):
+        print(
+            "UYARI: Islenmemis (orijinal) tablo kullaniliyor; 2 hatali "
+            "'<' etiketi duzeltilmemis. Once calistirin: "
+            "python -m src.build_dataset"
+        )
+
     # 2. Sadece hedef ölçümü yapılmış (NaN olmayan) gerçek gözlem satırlarını filtrele
     df_clean = df[df['Bactérias coliformes'].notna()].copy()
     
@@ -36,6 +61,12 @@ def load_and_preprocess_data(file_path):
     ]
 
     all_forbidden.update(cold_start_forbidden)
+
+    # META_ sutunlari (ornekleme turu, laboratuvar, yil, klor-eksik
+    # bayragi vb.) yalnizca analiz icindir; modele asla girmez.
+    all_forbidden.update(
+        c for c in df_clean.columns if c.startswith(META_PREFIX)
+    )
     
     # 5. Sayısal sütunları seç ve %50'den fazla eksik olanları / sabit sütunları ele
     numeric_cols = df_clean.select_dtypes(include=[np.number]).columns.tolist()

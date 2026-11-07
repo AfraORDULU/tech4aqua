@@ -1,3 +1,4 @@
+from src.config import DATA_PATH as CONFIG_DATA_PATH
 import os
 import joblib
 import pandas as pd
@@ -9,7 +10,7 @@ from src.preprocessing import load_and_preprocess_data
 
 def train_and_save_best_model():
     # 1. Ham veri dosyasının yolu
-    data_path = "data/raw/Base_Tech4Aqua_Features_Avancadas.csv"
+    data_path = str(CONFIG_DATA_PATH)
     
     print("Veri yükleniyor ve sızıntılar temizleniyor...")
     X, y, groups, feature_groups = load_and_preprocess_data(data_path)
