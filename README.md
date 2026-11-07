@@ -50,6 +50,12 @@ Bütün komutlar proje kök klasöründen çalıştırılır.
 | `python -m experiments.e04_weather_lags` | Son 3/7/14 günün yağışı gibi gecikmeli hava özellikleri | `results/e04_weather_lags/` |
 | `python -m experiments.e05_model_comparison` | LR, LightGBM, MLP, GroupDRO, CORAL; ZAPE CV, zamansal ve belediye dışarıda bırakma protokolleri | `results/e05_model_comparison/` |
 
+## Toplantı dokümanları
+
+- `docs/2_toplanti_model_secimi.pdf`: 2. toplantı (10 Kasım). Hocanın sorularına cevaplar,
+  model seçimi, doğrulama planı ve metrikler. İçindeki bütün sayılar `experiments/` altındaki
+  deneylerden üretildi.
+
 ## Klasör yapısı
 
 ```
@@ -64,6 +70,7 @@ src/
   evaluation.py       deney döngüsü, eşik seçimi, metrikler, ZAPE bootstrap
   data_quality_report.py, preprocessing.py, feature_groups.py   veri analizi raporu
 experiments/          her deney ayrı bir dosya (e01_, e02_, ...)
+docs/                 toplantı dokümanları (PDF)
 results/              deney çıktıları
 archive/              ara rapora kadar kullanılan eski betikler ve sonuçlar (yalnızca kayıt için)
 app/                  demo arayüzü (henüz yeni hatta bağlanmadı)
