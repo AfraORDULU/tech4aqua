@@ -1,0 +1,44 @@
+{
+  "model": "LR",
+  "seeds": [
+    0,
+    1,
+    2,
+    3,
+    4
+  ],
+  "n_splits": 5,
+  "purge": true,
+  "tune_threshold": true,
+  "training": "all_samples",
+  "feature_sets": {
+    "M1_klor": [
+      "Desinfetante residual"
+    ],
+    "M2_klor_sicaklik": [
+      "Desinfetante residual",
+      "TEMP MÁX (ºC)"
+    ],
+    "M3_klor_sicaklik_termal": [
+      "Desinfetante residual",
+      "TEMP MÁX (ºC)",
+      "DEGRADACAO_TERMICA_CLORO"
+    ],
+    "M4_C": [
+      "Desinfetante residual",
+      "TEMP MÁX (ºC)",
+      "PRECIPITAÇÃO (mm)",
+      "UMIDADE MÉDIA (%)",
+      "FLAG_CLORO_CRITICO",
+      "FLAG_CALOR_EXTREMO",
+      "FLAG_RUNOFF_RISCO",
+      "DEGRADACAO_TERMICA_CLORO",
+      "MES",
+      "SIN_MES",
+      "COS_MES",
+      "FLAG_VERAO"
+    ]
+  },
+  "n_rows": 522,
+  "formula_checked_rows": 507
+}
