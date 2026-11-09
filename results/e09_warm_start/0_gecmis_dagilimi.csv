@@ -1,0 +1,11 @@
+is_investigation,hist_bin,negatif,pozitif
+Rutin,0,6,1
+Rutin,1-2,11,3
+Rutin,3-5,18,3
+Rutin,6-10,26,9
+Rutin,11+,304,9
+Sorusturma,0,34,31
+Sorusturma,1-2,33,19
+Sorusturma,3-5,4,6
+Sorusturma,6-10,3,1
+Sorusturma,11+,1,0
