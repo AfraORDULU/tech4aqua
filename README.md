@@ -49,6 +49,13 @@ Bütün komutlar proje kök klasöründen çalıştırılır.
 | `python -m experiments.e03_temporal` | Zamana göre doğrulama: geçmişle eğit, sonraki yılları test et | `results/e03_temporal/` |
 | `python -m experiments.e04_weather_lags` | Son 3/7/14 günün yağışı gibi gecikmeli hava özellikleri | `results/e04_weather_lags/` |
 | `python -m experiments.e05_model_comparison` | LR, LightGBM, MLP, GroupDRO, CORAL; ZAPE CV, zamansal ve belediye dışarıda bırakma protokolleri | `results/e05_model_comparison/` |
+| `python -m experiments.e06_alarm_budget` | Rutin numunelerde %5 / %10 / %20 alarm bütçesinde yakalanan pozitifler (e01 gerekli) | `results/e06_alarm_budget/` |
+| `python -m experiments.e07_chlorine_temperature` | Klor, sıcaklık ve termal özellik ile 4 LR modeli (M1–M4) | `results/e07_chlorine_temperature/` |
+| `python -m experiments.e07b_m3_vs_chlorine` | M3'ün eğitimsiz klora karşı testi; M1 havuzlama tanısı (e07 gerekli) | `results/e07_chlorine_temperature/7b_*` |
+| `python -m experiments.e09_warm_start` | Warm-start: bölge geçmişi özellikleri, soğuk → sıcak başlangıç eğrisi | `results/e09_warm_start/` |
+| `python -m experiments.e10_fractional_labels` | Kesirli koliform sonuçlu 5 numune için duyarlılık testi | `results/e10_fractional_labels/` |
+
+E08 numarası, henüz yapılmamış "ZAPE-ay örnekleme önceliklendirmesi" önerisine ayrılmıştır.
 
 ## Toplantı dokümanları
 
@@ -66,6 +73,7 @@ src/
   validation.py       doğrulama protokolleri (ZAPE gruplu + arındırılmış CV, zamansal bölme)
   models.py           model tanımları (LR, RF, LightGBM)
   deep.py             MLP (derin öğrenme) + alan genelleme (GroupDRO, CORAL), PyTorch
+  history.py          bölge geçmişi (warm-start) özellikleri; yalnızca en az 2 gün önce alınmış numuneler
   weather.py          günlük hava verisinden gecikmeli özellikler (yalnızca numune gününden önceki günler)
   evaluation.py       deney döngüsü, eşik seçimi, metrikler, ZAPE bootstrap
   data_quality_report.py, preprocessing.py, feature_groups.py   veri analizi raporu
