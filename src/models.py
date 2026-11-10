@@ -15,7 +15,8 @@ from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import StandardScaler
 
 MODEL_NAMES = ("LR", "RF", "LGBM")
-DEEP_MODEL_NAMES = ("MLP", "GROUPDRO", "CORAL")
+DEEP_MODEL_NAMES = ("MLP", "GROUPDRO", "CORAL", "CNN1D")
+SEQUENCE_MODEL_NAMES = ("GRU_SEQ", "CNN_SEQ", "GRU_HYB")
 
 
 def make_model(name, seed=42):
@@ -46,6 +47,19 @@ def make_model(name, seed=42):
     if name in DEEP_MODEL_NAMES:
         from src.deep import TorchTabularClassifier  # torch yalnizca gerekirse
         method = {"MLP": "erm", "GROUPDRO": "groupdro",
-                  "CORAL": "coral"}[name]
+                  "CORAL": "coral", "CNN1D": "cnn1d"}[name]
         return TorchTabularClassifier(method=method, seed=seed)
+    if name in SEQUENCE_MODEL_NAMES:
+        from src import sequence  # torch yalnizca gerekirse
+        store = sequence.STORE_HYB if name == "GRU_HYB" else sequence.STORE
+        if store is None:
+            raise RuntimeError("Once sequence.STORE / STORE_HYB ayarlayin")
+        kind = "cnn" if name == "CNN_SEQ" else "gru"
+        return sequence.SequenceClassifier(kind=kind, store=store, seed=seed)
+    if name == "TABPFN":
+        import os
+        from tabpfn import TabPFNClassifier
+        path = os.environ.get("TABPFN_MODEL_PATH", "auto")
+        return TabPFNClassifier(model_path=path, device="cpu",
+                                random_state=seed)
     raise ValueError(f"Bilinmeyen model: {name}")

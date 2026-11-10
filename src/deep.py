@@ -7,6 +7,8 @@ Uc yontem ayni kucuk ag (MLP) uzerinde calisir; farklari kayip fonksiyonudur:
   GroupDRO : Gruplar (belediye x sinif) arasinda EN KOTU grubun kaybini
              azaltmaya calisir (Sagawa vd., 2020). Amac: egitimde zayif
              temsil edilen bolgelerde de calisan bir model.
+  CNN1D    : ERM ile egitilen 1 boyutlu evrisimli ag (ozellik vektoru
+             tek kanalli bir sinyal gibi okunur).
   CORAL    : Gizli katmandaki ozelliklerin kovaryansini belediyeler
              arasinda hizalar (Sun & Saenko, 2016). Amac: bolgeden
              bagimsiz bir temsil ogrenmek.
@@ -52,6 +54,23 @@ def _coral(z_a, z_b):
     return ((ca - cb) ** 2).sum() / (4 * d * d)
 
 
+class _CNN1D(nn.Module):
+    """Ozellik vektorunu tek kanalli 1 boyutlu bir sinyal gibi okuyan CNN."""
+
+    def __init__(self, n_in, dropout):
+        super().__init__()
+        self.conv = nn.Sequential(
+            nn.Conv1d(1, 16, kernel_size=3, padding=1), nn.ReLU(),
+            nn.Conv1d(16, 16, kernel_size=3, padding=1), nn.ReLU())
+        self.fc = nn.Sequential(nn.Linear(16 * n_in, 32), nn.ReLU(),
+                                nn.Dropout(dropout))
+        self.head = nn.Linear(32, 1)
+
+    def forward(self, x):
+        z = self.fc(self.conv(x.unsqueeze(1)).flatten(1))
+        return self.head(z).squeeze(-1), z
+
+
 class TorchTabularClassifier(BaseEstimator, ClassifierMixin):
     needs_groups = True
 
@@ -90,7 +109,10 @@ class TorchTabularClassifier(BaseEstimator, ClassifierMixin):
         pos_weight = torch.tensor((len(y_np) - pos) / pos)
         bce = nn.BCEWithLogitsLoss(pos_weight=pos_weight, reduction="none")
 
-        self.net_ = _MLP(x.shape[1], self.hidden, self.dropout)
+        if self.method == "cnn1d":
+            self.net_ = _CNN1D(x.shape[1], self.dropout)
+        else:
+            self.net_ = _MLP(x.shape[1], self.hidden, self.dropout)
         opt = torch.optim.Adam(self.net_.parameters(), lr=self.lr,
                                weight_decay=self.weight_decay)
 
