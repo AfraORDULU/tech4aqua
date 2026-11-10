@@ -1,0 +1,7 @@
+model,dizi_uzunlugu,epoch,secilme
+GRU (secimli),16,100,2
+GRU (secimli),4,100,1
+1D-CNN (secimli),16,100,2
+1D-CNN (secimli),4,100,1
+GRU dizi + ozet (secimli),4,100,2
+GRU dizi + ozet (secimli),16,100,1

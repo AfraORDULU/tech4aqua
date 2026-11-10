@@ -1,0 +1,9 @@
+model,olasilik,ortalama_tahmin,gercek_oran,brier,ECE
+LR A,ham,0.4184,0.1571,0.2028,0.2613
+LR A,Platt duzeltmeli,0.1598,0.1571,0.1238,0.036
+LR A+HIST,ham,0.3829,0.1571,0.1733,0.2355
+LR A+HIST,Platt duzeltmeli,0.1524,0.1571,0.1047,0.0463
+TABPFN A,ham,0.1417,0.1571,0.1102,0.0253
+TABPFN A,Platt duzeltmeli,0.1595,0.1571,0.1167,0.0383
+TABPFN A+HIST,ham,0.1775,0.1571,0.09,0.0234
+TABPFN A+HIST,Platt duzeltmeli,0.1543,0.1571,0.0913,0.0144

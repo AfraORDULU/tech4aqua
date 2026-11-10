@@ -90,8 +90,9 @@ class SequenceClassifier(BaseEstimator, ClassifierMixin):
     """kind: 'gru' veya 'cnn'. store: build_store(df) ciktisi."""
 
     def __init__(self, kind="gru", store=None, epochs=200, lr=3e-3,
-                 weight_decay=1e-3, seed=0):
+                 weight_decay=1e-3, max_len=MAX_LEN, seed=0):
         self.kind = kind
+        self.max_len = max_len
         self.store = store
         self.epochs = epochs
         self.lr = lr
@@ -101,12 +102,12 @@ class SequenceClassifier(BaseEstimator, ClassifierMixin):
     # ------------------------------------------------------------ tensors
     def _tensors(self, rows):
         s = self.store
-        L = MAX_LEN
+        L = self.max_len
         n_step = s["step"].shape[1] + 2
         seq = np.zeros((len(rows), L, n_step), dtype=np.float32)
         mask = np.zeros((len(rows), L), dtype=np.float32)
         for b, r in enumerate(rows):
-            hi, hg = s["hist_idx"][r], s["hist_gap"][r]
+            hi, hg = s["hist_idx"][r][-L:], s["hist_gap"][r][-L:]
             n = len(hi)
             if n == 0:
                 continue
@@ -120,6 +121,7 @@ class SequenceClassifier(BaseEstimator, ClassifierMixin):
         cur = np.where(np.isnan(cur), self.cur_med_, cur)
         cur = (cur - self.cur_mu_) / self.cur_sd_
         nh = np.log1p([len(s["hist_idx"][r]) for r in rows])[:, None] / 3.0
+        # not: bilinen gecmis sayisi tum gecmisten (en fazla MAX_LEN) sayilir
         cur = np.hstack([cur, nh]).astype(np.float32)
         return (torch.tensor(seq), torch.tensor(mask), torch.tensor(cur))
 
@@ -175,5 +177,58 @@ def build_store(df, current_cols=None):
                            [np.sin(2 * np.pi * m / 12),
                             np.cos(2 * np.pi * m / 12)])
     return {"hist_idx": hist_idx, "hist_gap": hist_gap, "step": step,
+            "zape": df["zape"].values,
             "y": df["y"].values.astype(float),
             "cur": df[current_cols].values.astype(float)}
+
+
+class SelectedSequenceClassifier(BaseEstimator, ClassifierMixin):
+    """Ayarlari YALNIZCA egitim verisi icinde secen dizi modeli.
+
+    fit() icinde egitim satirlari ZAPE'ye gore 3 gruba bolunur; her aday
+    ayar (dizi uzunlugu x epoch) icin ic dogrulamada ortalama hassasiyet
+    (PR-AUC) hesaplanir; en iyi ayarla tum egitim verisi yeniden egitilir.
+    Test verisi ayar seciminde hic kullanilmaz.
+    """
+
+    GRID = [(4, 100), (4, 200), (8, 100), (8, 200), (16, 100), (16, 200)]
+
+    def __init__(self, kind="gru", store=None, seed=0, inner_splits=3):
+        self.kind = kind
+        self.store = store
+        self.seed = seed
+        self.inner_splits = inner_splits
+
+    def fit(self, X, y, groups=None):
+        from sklearn.metrics import average_precision_score
+        from sklearn.model_selection import GroupKFold
+        y = np.asarray(y)
+        zapes = self.store["zape"][X["_row"].values.astype(int)]
+        scores = {}
+        n_groups = len(set(zapes))
+        k = min(self.inner_splits, n_groups)
+        for L, ep in self.GRID:
+            preds = np.full(len(y), np.nan)
+            if k >= 2:
+                for tr, te in GroupKFold(n_splits=k).split(X, y, zapes):
+                    if y[tr].sum() == 0:
+                        continue
+                    m = SequenceClassifier(self.kind, self.store, epochs=ep,
+                                           max_len=L, seed=self.seed)
+                    m.fit(X.iloc[tr], y[tr])
+                    preds[te] = m.predict_proba(X.iloc[te])[:, 1]
+            ok = ~np.isnan(preds)
+            scores[(L, ep)] = (average_precision_score(y[ok], preds[ok])
+                               if ok.sum() and 0 < y[ok].sum() < ok.sum()
+                               else -1)
+        self.best_ = max(scores, key=scores.get)
+        self.scores_ = scores
+        L, ep = self.best_
+        self.model_ = SequenceClassifier(self.kind, self.store, epochs=ep,
+                                         max_len=L, seed=self.seed)
+        self.model_.fit(X, y)
+        self.classes_ = np.array([0, 1])
+        return self
+
+    def predict_proba(self, X):
+        return self.model_.predict_proba(X)
