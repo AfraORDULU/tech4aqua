@@ -36,7 +36,13 @@ HISTORY_FEATURES = ["HIST_N", "HIST_POS_RATE", "HIST_LAST_POS",
                     "HIST_DAYS_LAST", "HIST_DAYS_LAST_POS", "HIST_CL_MEAN"]
 
 
-def add_history_features(df, lab_delay_days=LAB_DELAY_DAYS):
+def add_history_features(df, lab_delay_days=LAB_DELAY_DAYS,
+                         source_mask=None, prefix=None):
+    """source_mask: verilirse gecmis yalnizca bu satirlardan hesaplanir
+    (or. yalniz rutin numuneler). prefix: verilirse sutun adlari
+    HIST_ yerine bu onekle yazilir (or. "HISTR_")."""
+    if source_mask is not None:
+        src_all = pd.Series(np.asarray(source_mask, bool), index=df.index)
     out = df.copy()
     for c in HISTORY_FEATURES:
         out[c] = np.nan
@@ -45,8 +51,10 @@ def add_history_features(df, lab_delay_days=LAB_DELAY_DAYS):
         dates = g["date"].values
         ys = g["y"].values
         cls = g[CHLORINE].values
+        src = (src_all.loc[g.index].values if source_mask is not None
+               else np.ones(len(g), bool))
         for idx, d in zip(g.index, dates):
-            known = dates <= d - np.timedelta64(lab_delay_days, "D")
+            known = (dates <= d - np.timedelta64(lab_delay_days, "D")) & src
             n = int(known.sum())
             out.at[idx, "HIST_N"] = n
             if n == 0:
@@ -67,4 +75,8 @@ def add_history_features(df, lab_delay_days=LAB_DELAY_DAYS):
             kc = cls[known]
             if np.isfinite(kc).any():
                 out.at[idx, "HIST_CL_MEAN"] = np.nanmean(kc)
+    if prefix is not None:
+        new = {c: c.replace("HIST_", prefix) for c in HISTORY_FEATURES}
+        out = out.rename(columns=new)
+        out = df.join(out[list(new.values())])
     return out

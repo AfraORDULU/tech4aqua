@@ -9,7 +9,8 @@ Burada her egitim katinda dizi uzunlugu (4, 8, 16) ve epoch sayisi (100,
 
 Modeller: GRU, 1D-CNN (dizi) ve hibrit GRU (dizi + el yapimi gecmis ozeti).
 Hesaplama maliyeti nedeniyle esik 0.5 sabit tutulur (ROC/PR-AUC esikten
-bagimsizdir).
+bagimsizdir). GRU modelleri ayrica genisleyen pencereyle (gelecek yil)
+test edilir. Test disi olasiliklar oof.csv'ye yazilir.
 
 Calistirma: python -m experiments.e14_sequence_selection
 Ciktilar: results/e14_sequence_selection/
@@ -24,9 +25,10 @@ from src import sequence
 from src.config import RESULTS_DIR
 from src.data import CHLORINE, FEATURE_SETS, load_dataset
 from src.evaluation import (compute_metrics, mean_prob, mean_std, run_cv,
-                            summarize, zape_bootstrap)
+                            run_temporal, summarize, zape_bootstrap)
 from src.history import HISTORY_FEATURES, add_history_features
 from src.models import make_model
+from src.validation import temporal_splits
 
 OUT = RESULTS_DIR / "e14_sequence_selection"
 SEEDS = (0, 1, 2)
@@ -48,9 +50,10 @@ def main():
     cl = df[CHLORINE]
     chlorine = -cl.fillna(cl.median()).values
 
-    rows, probs = [], {}
+    rows, probs, oofs = [], {}, []
     for name, cols, model in RUNS:
         oof = run_cv(df, cols, model, SEEDS, tune_threshold=False)
+        oofs.append(oof.assign(protocol="zape_cv", model=name))
         probs[name] = mean_prob(oof).sort_index().values
         line = []
         for sname, smask in subsets.items():
@@ -60,6 +63,31 @@ def main():
                         f"PR={m['PR_AUC']:.3f}")
         print(f"{name:28s} " + " | ".join(line))
     pd.DataFrame(rows).round(4).to_csv(OUT / "summary.csv", index=False)
+    pd.concat(oofs).to_csv(OUT / "oof.csv", index=False)
+
+    # Gelecek yil testi (genisleyen pencere), GRU modelleri
+    rolling = list(temporal_splits(df, range(2015, 2026), unseen_zape=False))
+    roll_rows = []
+    for name, cols, model in RUNS:
+        if not model.startswith("GRU"):
+            continue
+        oof = run_temporal(df, cols, model, rolling, SEEDS,
+                           tune_threshold=False)
+        oofs.append(oof.assign(protocol="rolling", model=name))
+        test_rows = np.unique(oof["row"].values)
+        for sname, smask in subsets.items():
+            m = mean_std(summarize(df, oof, smask))
+            roll_rows.append({"model": name, "test": sname, **m})
+            print(f"rolling {name:28s} {sname}: ROC={m['ROC_AUC']:.3f} "
+                  f"PR={m['PR_AUC']:.3f}")
+    for sname, smask in subsets.items():
+        idx = test_rows[smask[test_rows]]
+        m = compute_metrics(df["y"].values[idx], chlorine[idx])
+        m.pop("brier", None)
+        roll_rows.append({"model": "YALNIZ_KLOR", "test": sname, **m})
+    pd.DataFrame(roll_rows).round(4).to_csv(OUT / "summary_rolling.csv",
+                                            index=False)
+    pd.concat(oofs).to_csv(OUT / "oof.csv", index=False)
 
     # Tum veriyle egitimde hangi ayar seciliyor? (bilgi amacli)
     chosen = Counter()

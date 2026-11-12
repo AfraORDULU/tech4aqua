@@ -110,7 +110,8 @@ def run_cv(df, features, model_name, seeds=(0, 1, 2, 3, 4), n_splits=5,
     return pd.concat(rows, ignore_index=True)
 
 
-def run_temporal(df, features, model_name, splits, seeds=(0, 1, 2)):
+def run_temporal(df, features, model_name, splits, seeds=(0, 1, 2),
+                 tune_threshold=True):
     """Zamansal bolmeler icin test-disi olasiliklar.
 
     splits: (etiket, train_idx, test_idx) listesi
@@ -123,7 +124,8 @@ def run_temporal(df, features, model_name, splits, seeds=(0, 1, 2)):
             model = fit_model(make_model(model_name, seed), df, features,
                               tr)
             prob = model.predict_proba(df.iloc[te][features])[:, 1]
-            thr = choose_threshold(df, features, model_name, tr, seed)
+            thr = (choose_threshold(df, features, model_name, tr, seed)
+                   if tune_threshold else 0.5)
             rows.append(pd.DataFrame({
                 "seed": seed, "fold": label, "row": te, "prob": prob,
                 "threshold": thr, "pred": (prob >= thr).astype(int),

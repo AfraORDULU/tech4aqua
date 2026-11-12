@@ -57,8 +57,10 @@ Bütün komutlar proje kök klasöründen çalıştırılır.
 | `python -m experiments.e11_sequence_models` | Bölge geçmişini dizi olarak okuyan GRU / 1D-CNN (sabit ayar) | `results/e11_sequence_models/` |
 | `TABPFN_MODEL_PATH=... python -m experiments.e12_tabpfn_cnn` | TabPFN v2 ve tablo 1D-CNN, üç test senaryosu | `results/e12_tabpfn_cnn/` |
 | `TABPFN_MODEL_PATH=... python -m experiments.e13_tabpfn_history` | TabPFN + bölge geçmişi; test dışı olasılıklar (oof.csv) | `results/e13_tabpfn_history/` |
-| `python -m experiments.e14_sequence_selection` | Dizi modelleri: dizi uzunluğu ve epoch eğitim içinde seçilir | `results/e14_sequence_selection/` |
+| `python -m experiments.e14_sequence_selection` | Dizi modelleri: dizi uzunluğu ve epoch eğitim içinde seçilir; GRU'lar için gelecek yıl testi | `results/e14_sequence_selection/` |
 | `python -m experiments.e15_error_calibration` | Hata analizi ve kalibrasyon (E13 çıktısını kullanır) | `results/e15_error_calibration/` |
+| `TABPFN_MODEL_PATH=... python -m experiments.e16_routine_history` | Bölge geçmişi yalnız rutin numunelerden hesaplanırsa (LR, TabPFN) | `results/e16_routine_history/` |
+| `python -m experiments.e17_decision_analysis` | Alarm bütçesi, eşik eğrileri, başarı eğrisi (E13, E14, E16 çıktılarını kullanır) | `results/e17_decision_analysis/` |
 
 E08 numarası, henüz yapılmamış "ZAPE-ay örnekleme önceliklendirmesi" önerisine ayrılmıştır.
 

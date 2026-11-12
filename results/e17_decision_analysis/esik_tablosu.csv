@@ -1,0 +1,29 @@
+model,test,esik,alarm,yakalanan,kirli,kesinlik,duyarlilik
+A + gecmis + TabPFN,Tumu,0.05,274,78,82,0.285,0.951
+A + gecmis + TabPFN,Tumu,0.1,205,73,82,0.356,0.89
+A + gecmis + TabPFN,Tumu,0.15,172,70,82,0.407,0.854
+A + gecmis + TabPFN,Tumu,0.2,142,67,82,0.472,0.817
+A + gecmis + TabPFN,Tumu,0.3,118,62,82,0.525,0.756
+A + gecmis + TabPFN,Tumu,0.4,104,57,82,0.548,0.695
+A + gecmis + TabPFN,Tumu,0.5,81,45,82,0.556,0.549
+A + gecmis + TabPFN,Rutin,0.05,147,21,25,0.143,0.84
+A + gecmis + TabPFN,Rutin,0.1,88,16,25,0.182,0.64
+A + gecmis + TabPFN,Rutin,0.15,62,14,25,0.226,0.56
+A + gecmis + TabPFN,Rutin,0.2,41,12,25,0.293,0.48
+A + gecmis + TabPFN,Rutin,0.3,27,11,25,0.407,0.44
+A + gecmis + TabPFN,Rutin,0.4,21,9,25,0.429,0.36
+A + gecmis + TabPFN,Rutin,0.5,15,6,25,0.4,0.24
+A + TabPFN,Tumu,0.05,333,77,82,0.231,0.939
+A + TabPFN,Tumu,0.1,260,73,82,0.281,0.89
+A + TabPFN,Tumu,0.15,205,67,82,0.327,0.817
+A + TabPFN,Tumu,0.2,153,54,82,0.353,0.659
+A + TabPFN,Tumu,0.3,70,34,82,0.486,0.415
+A + TabPFN,Tumu,0.4,24,15,82,0.625,0.183
+A + TabPFN,Tumu,0.5,12,6,82,0.5,0.073
+A + TabPFN,Rutin,0.05,238,23,25,0.097,0.92
+A + TabPFN,Rutin,0.1,177,22,25,0.124,0.88
+A + TabPFN,Rutin,0.15,130,19,25,0.146,0.76
+A + TabPFN,Rutin,0.2,93,14,25,0.151,0.56
+A + TabPFN,Rutin,0.3,34,3,25,0.088,0.12
+A + TabPFN,Rutin,0.4,7,0,25,0.0,0.0
+A + TabPFN,Rutin,0.5,4,0,25,0.0,0.0
