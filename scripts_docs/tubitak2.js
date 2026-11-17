@@ -58,6 +58,7 @@ const sp = () => new Paragraph({ children: [], spacing: { after: 60 } });
 // Her künye yayıncı / DOI / PubMed / bildiri arşivinden kontrol edilmiştir (Kasım 2026).
 const REFS = [
  "Avrupa Parlamentosu ve Avrupa Birliği Konseyi. 2020. “Directive (EU) 2020/2184 of the European Parliament and of the Council of 16 December 2020 on the quality of water intended for human consumption (recast)”, Official Journal of the European Union, L 435, 1-62.",
+ "baosenguo. 2020. “Kaggle-MoA-2nd-Place-Solution: 1D-CNN training notebook”, GitHub deposu, https://github.com/baosenguo/Kaggle-MoA-2nd-Place-Solution (commit bda770c; erişim tarihi: 17.11.2026).",
  "Barcia, M., Sixto, A., Cerdeiras, M. P. 2024. “Prediction of microbiological non-compliances using a Boosted Regression Trees model: application on the drinking water distribution system of a whole country”, Water Supply, 24 (4), 1080-1088. DOI: 10.2166/ws.2024.057.",
  "Brier, G. W. 1950. “Verification of forecasts expressed in terms of probability”, Monthly Weather Review, 78 (1), 1-3. DOI: 10.1175/1520-0493(1950)078<0001:VOFEIT>2.0.CO;2.",
  "Chicco, D., Jurman, G. 2020. “The advantages of the Matthews correlation coefficient (MCC) over F1 score and accuracy in binary classification evaluation”, BMC Genomics, 21 (1), 6. DOI: 10.1186/s12864-019-6413-7.",
@@ -153,21 +154,23 @@ const children = [
 
   h1("2. YÖNTEM"),
   h2("2.1. Ön Çalışma ve Fizibilite"),
-  p("Önerilen araştırma, ekibin yürüttüğü ön çalışmaların kontrollü ve tekrarlanabilir biçimde genişletilmesidir. Ön çalışmalarda (i) yayımlanmış veri setinde laboratuvarın \"<\" işaretiyle verdiği \"tespit edilmedi\" sonuçlarının pozitif sayıldığı bir etiket hatası bulunmuş ve düzeltilmiş, (ii) aynı belediyede aynı gün alınan numunelerin aynı hava değerlerini paylaşmasından kaynaklanan bir veri sızıntısı tespit edilmiş, (iii) numaralandırılmış 16 deney betiğiyle modeller üç test senaryosunda karşılaştırılmıştır (Tablo 1, Şekil 1). Sızıntı engellendiğinde Rastgele Orman'ın PR-AUC değeri 0,42'den 0,27'ye düşmüştür; bu, sızıntının sonuçları ne ölçüde iyimser gösterebileceğini somut olarak ortaya koymaktadır."),
+  p("Önerilen araştırma, ekibin yürüttüğü ön çalışmaların kontrollü ve tekrarlanabilir biçimde genişletilmesidir. Ön çalışmalarda (i) yayımlanmış veri setinde laboratuvarın \"<\" işaretiyle verdiği \"tespit edilmedi\" sonuçlarının pozitif sayıldığı bir etiket hatası bulunmuş ve düzeltilmiş, (ii) aynı belediyede aynı gün alınan numunelerin aynı hava değerlerini paylaşmasından kaynaklanan bir veri sızıntısı tespit edilmiş, (iii) numaralandırılmış 17 deney betiğiyle modeller üç test senaryosunda karşılaştırılmıştır (Tablo 1, Şekil 1). Sızıntı engellendiğinde Rastgele Orman'ın PR-AUC değeri 0,42'den 0,27'ye düşmüştür; bu, sızıntının sonuçları ne ölçüde iyimser gösterebileceğini somut olarak ortaya koymaktadır."),
   cap("**Tablo 1.** Ön çalışma sonuçları: görülmemiş bölge testi (ZAPE gruplu, arındırılmış 5 katlı çapraz doğrulama, 3 tohum ortalaması). Değerler ROC-AUC / PR-AUC'dir."),
   table(["Model", "Kullanılan bilgi", "Tüm numuneler (522; 82 uygunsuz)", "Rutin numuneler (390; 25 uygunsuz)"], [
     ["Eğitimsiz klor sıralaması", "Yalnız serbest klor", "0,720 / 0,281", "0,848 / 0,270"],
     ["Lojistik Regresyon", "Klor, hava, ay", "0,754 / 0,347", "0,782 / 0,196"],
-    ["1D-CNN (tablo)", "Klor, hava, ay", "0,686 / 0,276", "0,731 / 0,177"],
+    ["1D-CNN (tablo, kendi yazdığımız)", "Klor, hava, ay", "0,686 / 0,276", "0,731 / 0,177"],
+    ["1D-CNN (yayımlanmış orijinal mimari)", "Klor, hava, ay", "0,684 / 0,267", "0,722 / 0,179"],
     ["TabPFN", "Klor, hava, ay", "0,801 / 0,422", "0,752 / 0,132"],
     ["Lojistik Regresyon", "+ bölge geçmişi özeti", "0,825 / 0,519", "0,748 / 0,380"],
+    ["1D-CNN (yayımlanmış orijinal mimari)", "+ bölge geçmişi özeti", "0,839 / 0,529", "0,746 / 0,322"],
     ["GRU (dizi, ayarı eğitimde seçilmiş)", "+ bölge geçmişi dizisi", "0,822 / 0,493", "0,684 / 0,266"],
     ["TabPFN", "+ bölge geçmişi özeti", "0,878 / 0,563", "0,814 / 0,328"],
   ], [2500, 1900, 2420, 2421], { right: [2, 3] }),
   sp(),
   img("s1_on_calisma.png", 600, 254),
   figcap("**Şekil 1.** Ön çalışmada modellerin görülmemiş bölge testindeki (a) ROC-AUC ve (b) PR-AUC değerleri. Mavi çubuklar tüm numuneleri, turuncu çubuklar rutin numuneleri gösterir. Noktalı çizgiler rastgele bir modelin düzeyidir (PR-AUC'de pozitif oranı: tüm numunelerde 0,157, rutin numunelerde 0,064)."),
-  p("Bu sonuçlar tek başına kesin bir üstünlük olarak yorumlanamaz. Tüm numunelerde TabPFN + bölge geçmişi klor sıralamasından anlamlı biçimde iyidir (PR-AUC farkı +0,285; %95 güven aralığı +0,121 ile +0,426); ancak rutin numunelerde hiçbir model klor sıralamasını anlamlı biçimde geçememiştir. Geçmiş özetleri yalnızca önceki rutin numunelerden hesaplandığında Lojistik Regresyon'daki kazancın büyük kısmı kaybolmuş (PR-AUC 0,519'dan 0,380'e), numune türleri ayrı incelendiğinde geçmiş bilgisi anlamlı kazanç sağlamamıştır. Ayarı eğitimde seçilen GRU ise gelecek yıl testinde rutin numunelerde rastgele düzeye düşmüştür (ROC-AUC 0,49). Bu nedenle önerilen projede kazancın kaynağı numune türüne, bölgeden bilinen ölçüm sayısına ve zamana göre ayrıştırılacak, sonuçların belirsizliği açıkça raporlanacaktır."),
+  p("Kendi yazdığımız 1D-CNN'in düşük sonucunun bir uygulama hatasından kaynaklanıp kaynaklanmadığını sınamak için tablo verisi için yayımlanmış bir 1D-CNN (baosenguo, 2020) orijinal mimarisi ve eğitim ayarlarıyla aynı protokolde çalıştırılmış ve neredeyse aynı sonuç alınmıştır (ROC-AUC 0,684); bölge geçmişi eklendiğinde bu model 0,839'a yükselmiştir. Bu, tek başına klor, hava ve takvim bilgisinin evrişimli ağlar için yetersiz olduğunu, sinir ağlarının kazancının bölge geçmişinden geldiğini göstermektedir. Bu sonuçlar tek başına kesin bir üstünlük olarak yorumlanamaz. Tüm numunelerde TabPFN + bölge geçmişi klor sıralamasından anlamlı biçimde iyidir (PR-AUC farkı +0,285; %95 güven aralığı +0,121 ile +0,426); ancak rutin numunelerde hiçbir model klor sıralamasını anlamlı biçimde geçememiştir. Geçmiş özetleri yalnızca önceki rutin numunelerden hesaplandığında Lojistik Regresyon'daki kazancın büyük kısmı kaybolmuş (PR-AUC 0,519'dan 0,380'e), numune türleri ayrı incelendiğinde geçmiş bilgisi anlamlı kazanç sağlamamıştır. Ayarı eğitimde seçilen GRU ise gelecek yıl testinde rutin numunelerde rastgele düzeye düşmüştür (ROC-AUC 0,49). Bu nedenle önerilen projede kazancın kaynağı numune türüne, bölgeden bilinen ölçüm sayısına ve zamana göre ayrıştırılacak, sonuçların belirsizliği açıkça raporlanacaktır."),
 
   h2("2.2. Araştırma İş Akışı"),
   p("Çalışmanın genel akışı Şekil 2'de özetlenmiştir. Veri sürümü, etiket kuralı ve test bölmeleri sabitlendikten sonra bütün modeller aynı özellikler, aynı bölmeler ve aynı rastgele tohumlarla eğitilecek; yalnızca model türü ve kullanılan bilgi (klor/hava/takvim, bölge geçmişi özeti, bölge geçmişi dizisi) değiştirilecektir. Her deney numaralandırılmış ayrı bir betik olarak yazılacak ve tek komutla yeniden üretilebilecektir."),
@@ -206,6 +209,7 @@ const children = [
     ["TabPFN v2", "Önceden eğitilmiş transformer (Hollmann vd., 2025)", "Ağırlıklar güncellenmez; eğitim katı bağlam olarak verilir; 3 tohum."],
     ["MLP", "Derin, tam bağlantılı", "Gizli katmanlar 32 ve 16 nöron, ReLU, dropout 0,2; Adam (öğrenme oranı 0,001, ağırlık azaltma 0,001), 300 tur."],
     ["1D-CNN (tablo)", "Derin, evrişimli", "Özellik vektörü tek kanallı sinyal: iki Conv1d (16 kanal, çekirdek 3) ve 32 nöronlu katman."],
+    ["1D-CNN (orijinal, soft-ordering)", "Derin, evrişimli (baosenguo, 2020)", "Kaggle MoA 2. sıra çözümünün mimarisi ve eğitim ayarları birebir: 4096 boyutlu katman, 256 kanallı sinyale dönüştürme, 3 evrişim bloğu; Adam, OneCycle (en yüksek 0,01), 25 tur, batch 128."],
     ["GroupDRO / CORAL", "Alan genelleme (Sagawa vd., 2020; Sun ve Saenko, 2016)", "MLP ile aynı ağ; belediye × sınıf grup ağırlıkları (η = 0,1) / belediyeler arası kovaryans cezası (ağırlık 1)."],
     ["GRU / 1D-CNN (dizi)", "Derin, yinelemeli / evrişimli (Cho vd., 2014)", "16 birimli GRU veya iki Conv1d; dizi özeti güncel özelliklerle birleştirilip 32 nöronlu katmana verilir; Adam (0,003)."],
   ], [2300, 2500, 4441]),

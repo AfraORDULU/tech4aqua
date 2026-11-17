@@ -99,3 +99,15 @@ app/                  demo arayüzü (henüz yeni hatta bağlanmadı)
 - **Eşik seçimi:** Karar eşiği yalnızca eğitim verisi içinde, iç gruplu CV ile seçilir.
 - **Tekrar:** Her deney 5 farklı tohumla tekrarlanır.
 - Bu kuralların her biri `src/validation.py` içinde kodla doğrulanır (`assert`).
+
+### E18 - Yayımlanmış orijinal 1D-CNN (Kaggle MoA 2. sıra, baosenguo)
+Kendi 1D-CNN'imizin düşük sonucunu sınamak için tablo verisine özgü "soft-ordering" 1D-CNN,
+orijinal mimari ve eğitim ayarlarıyla (`src/moa_cnn.py`) ZAPE gruplu CV'de çalıştırıldı.
+Kaynak: https://github.com/baosenguo/Kaggle-MoA-2nd-Place-Solution (commit bda770c)
+
+| Özellik | Tüm (ROC / PR) | Rutin (ROC / PR) |
+|---|---|---|
+| A (klor, hava, ay) | 0.684 / 0.267 | 0.722 / 0.179 |
+| A + bölge geçmişi | 0.839 / 0.529 | 0.746 / 0.322 |
+
+Sonuç kendi 1D-CNN'imizle (0.686 / 0.276) neredeyse aynı: düşük sonuç uygulama hatası değil.

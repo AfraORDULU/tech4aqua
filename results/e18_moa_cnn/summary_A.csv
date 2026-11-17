@@ -1,0 +1,3 @@
+model,features,test,ROC_AUC,PR_AUC
+MOA_CNN,A,Tumu,0.6838,0.2665
+MOA_CNN,A,Rutin,0.7222,0.1794

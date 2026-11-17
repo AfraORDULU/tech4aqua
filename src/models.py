@@ -61,6 +61,9 @@ def make_model(name, seed=42):
             return sequence.SelectedSequenceClassifier(kind=kind, store=store,
                                                        seed=seed)
         return sequence.SequenceClassifier(kind=kind, store=store, seed=seed)
+    if name == "MOA_CNN":
+        from src.moa_cnn import MoACNNClassifier  # orijinal soft-ordering 1D-CNN
+        return MoACNNClassifier(seed=seed)
     if name == "TABPFN":
         import os
         from tabpfn import TabPFNClassifier
